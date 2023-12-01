@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Chocolate Pack</title>
+</head>
+<style>
+    body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h1, h2 {
+    color: rgb(9, 10, 98);
+}
+
+#chocolate-options, #selected-chocolates, #total-price {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.chocolate-checkbox {
+    margin-right: 10px;
+}
+
+</style>
+<body>
+    <h1>Add Your Favourate Chocolate Pack</h1>
+    
+    <div id="chocolate-options">
+        <!-- Display available chocolate options -->
+        <label><input type="checkbox" class="chocolate-checkbox" data-name="Dark Chocolate" data-price="250"> Dark Chocolate</label>
+        <label><input type="checkbox" class="chocolate-checkbox" data-name="Milk Chocolate" data-price="180"> Milk Chocolate</label>
+        <label><input type="checkbox" class="chocolate-checkbox" data-name="White Chocolate" data-price="200"> White Chocolate</label>
+        <!-- Add more chocolate options as needed -->
+    </div>
+
+    <div id="selected-chocolates">
+        <h2>Your Selection</h2>
+        <!-- Display selected chocolates and their quantities -->
+    </div>
+
+    <div id="total-price">
+        <h2>Total Price: Rs <span id="total-amount">0.00</span></h2>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('.chocolate-checkbox');
+    const selectedChocolatesDiv = document.getElementById('selected-chocolates');
+    const totalAmountSpan = document.getElementById('total-amount');
+
+    let selectedChocolates = [];
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            updateSelectedChocolates();
+            updateTotalPrice();
+        });
+    });
+
+    function updateSelectedChocolates() {
+        selectedChocolates = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => ({
+                name: checkbox.getAttribute('data-name'),
+                price: parseFloat(checkbox.getAttribute('data-price')),
+                quantity: 1 // You can add a quantity input for each chocolate if needed
+            }));
+
+        displaySelectedChocolates();
+    }
+
+    function displaySelectedChocolates() {
+        selectedChocolatesDiv.innerHTML = '';
+        selectedChocolates.forEach(chocolate => {
+            const chocolateDiv = document.createElement('div');
+            chocolateDiv.textContent = `${chocolate.name} x${chocolate.quantity}`;
+            selectedChocolatesDiv.appendChild(chocolateDiv);
+        });
+    }
+
+    function updateTotalPrice() {
+        const totalPrice = selectedChocolates.reduce((total, chocolate) => total + (chocolate.price * chocolate.quantity), 0);
+        totalAmountSpan.textContent = totalPrice.toFixed(2);
+    }
+});
+
+</script>
+</body>
+</html>
